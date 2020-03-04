@@ -20,6 +20,7 @@ module.exports = class User {
     static insert(name,age){
         const u = new User(name,age)
         User.users.push(u)
+        return u
     }
     static getOneByName(name){
        return  User.users.find(item=>item.name === name)
