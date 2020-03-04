@@ -1,8 +1,10 @@
 const users = []
-module.exports = class User {
+
+class User {
     constructor(name, age) {
         this.name = name
         this.age = age
+        this.id = User.id++
     }
     getName(){
         return this.name
@@ -25,5 +27,10 @@ module.exports = class User {
     static getOneByName(name){
        return  User.users.find(item=>item.name === name)
     }
+    static getOneById(userId){
+       return  User.users.find(item=>item.id === Number(userId))
+    }
 
 }
+User.id = 0
+module.exports =  User
