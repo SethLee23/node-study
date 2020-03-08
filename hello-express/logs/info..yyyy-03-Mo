@@ -1,0 +1,3 @@
+{"message":"hello error","level":"error"}
+{"message":"hello error","level":"error"}
+{"query":{},"url":"/helloRouter/1212","level":"error","message":"HTTP ERROR: userId wrong: 用户id不能为空"}

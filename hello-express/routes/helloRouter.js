@@ -1,4 +1,5 @@
 const express = require('express');
+const HTTPReqParamError = require('../errors/http_request_param_error');
 
 const router = express.Router();
 const UserService = require('../services/user_service');
@@ -16,12 +17,19 @@ router.post('/', (req, res) => {
     res.json(u);
   })();
 });
-router.get('/:userId', (req, res) => {
+router.get('/:userId', (req, res, next) => {
   (async () => {
-    const users = await UserService.getUserByUserId(req.params.userId);
+    const { userId } = req.params;
+    if (userId === '1212') throw new HTTPReqParamError('userId', '用户id不能为空', 'userid cant be empty');
+    const users = await UserService.getUserByUserId(userId);
     console.log('users', users);
     res.json(users);
-  })();
+  })()
+    .then((r) => { console.log(r); })
+    .catch((err) => {
+      console.log(err);
+      next(err);
+    });
 });
 router.post('/:userId/subscription', (req, res, next) => {
   (async () => {

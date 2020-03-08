@@ -5,7 +5,6 @@ const { Schema } = mongoose;
 const userSchema = new Schema({
   name: { type: String, required: true, index: 1 },
   age: { type: Number, min: 0, max: 120 },
-  // subscriptions: { type }
 });
 const userModel = mongoose.model('user', userSchema);
 
@@ -14,9 +13,7 @@ async function insert(name, age) {
   return u;
 }
 async function getOneById(userId) {
-  console.log('_id', userId);
   const u = await userModel.findOne({ _id: userId });
-  console.log(u);
   return u;
 }
 async function getOneByName(name) {

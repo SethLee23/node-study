@@ -4,7 +4,9 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 require('./services/mongoose_connection');
-
+const HTTPErrorHandler = require('./middlewares/http_error_handler');
+const errorHandler = require('./middlewares/error_handler');
+const winston = require('./winston_demo');
 // const __dirname = path.resolve();
 
 const indexRouter = require('./routes/index');
@@ -33,7 +35,11 @@ app.use('/helloRouter', helloRouter);
 app.use((req, res, next) => {
   next(createError(404));
 });
+// HTTP error handler
+app.use(HTTPErrorHandler());
 
+// error handler
+app.use(errorHandler());
 // error handler
 app.use((err, req, res) => {
   // set locals, only providing error in development
@@ -43,6 +49,15 @@ app.use((err, req, res) => {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+
+process.on('uncaughtException', (err) => {
+  winston.error(err);
+});
+
+process.on('unhandledRejection', (reason, p) => {
+  winston.error('Unhandled Rejection at:', p, 'reason:', reason);
 });
 
 module.exports = app;
