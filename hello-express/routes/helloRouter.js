@@ -1,5 +1,6 @@
 const express = require('express');
 const HTTPReqParamError = require('../errors/http_request_param_error');
+const auth = require('../middlewares/auth');
 
 const router = express.Router();
 const UserService = require('../services/user_service');
@@ -10,12 +11,17 @@ router.get('/', (req, res) => {
     res.json(users);
   })();
 });
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
   (async () => {
-    const { name, age } = req.body;
-    const u = await UserService.addNewUser(name, age);
-    res.json(u);
-  })();
+    console.log(1111);
+    const { username, password, name } = req.body;
+    const u = await UserService.addNewUser({ username, password, name });
+    res.json({ username, password, name });
+  })().then((r) => { console.log(r); })
+    .catch((err) => {
+      console.log(err);
+      next(err);
+    });
 });
 router.get('/:userId', (req, res, next) => {
   (async () => {

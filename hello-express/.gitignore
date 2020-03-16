@@ -1,1 +1,3 @@
 node_modules/
+# cipher stuff never commit it to public repo
+.cipher
